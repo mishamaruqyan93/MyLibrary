@@ -11,13 +11,14 @@ public class AuthorManager {
     private Connection connection = DBConnectionProvider.getInstance().getConnection();
 
     public void addAuthor(Author author) {
-        String sql = "Insert into author(name,surname,email,age) Values (?,?,?,?)";
+        String sql = "Insert into author(name,surname,email,age,profile_pic) Values (?,?,?,?,?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, author.getName());
             preparedStatement.setString(2, author.getSurName());
             preparedStatement.setString(3, author.getEmail());
             preparedStatement.setInt(4, author.getAge());
+            preparedStatement.setString(5, author.getProfilePic());
             preparedStatement.executeLargeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -60,6 +61,7 @@ public class AuthorManager {
         author.setSurName(resultSet.getString("surname"));
         author.setEmail(resultSet.getString("email"));
         author.setAge(resultSet.getInt(5));
+        author.setProfilePic(resultSet.getString("profile_pic"));
         return author;
     }
 
@@ -74,7 +76,7 @@ public class AuthorManager {
     }
 
     public void edit(Author author) {
-        String sql = "Update  author set name=?,surname=?,email=?,age=? WHERE id=?";
+        String sql = "Update  author set name=?,surname=?,email=?,age=?,profile_pic=? WHERE id=?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, author.getName());
@@ -82,6 +84,7 @@ public class AuthorManager {
             preparedStatement.setString(3, author.getEmail());
             preparedStatement.setInt(4, author.getAge());
             preparedStatement.setInt(5, author.getId());
+            preparedStatement.setString(6,author.getProfilePic());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

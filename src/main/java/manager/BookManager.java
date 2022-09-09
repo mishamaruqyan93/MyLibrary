@@ -13,13 +13,14 @@ public class BookManager {
     private AuthorManager authorManager = new AuthorManager();
 
     public void addBook(Book book) {
-        String sql = "Insert into book(title,description,price,author_id) Values (?,?,?,?)";
+        String sql = "Insert into book(title,description,price,author_id,profile_pic) Values (?,?,?,?,?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, book.getTitle());
             preparedStatement.setString(2, book.getDescription());
             preparedStatement.setDouble(3, book.getPrice());
             preparedStatement.setInt(4, book.getAuthor().getId());
+            preparedStatement.setString(5,book.getProfilePic());
             preparedStatement.executeLargeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -61,6 +62,7 @@ public class BookManager {
         book.setTitle(resultSet.getString("title"));
         book.setDescription(resultSet.getString("description"));
         book.setPrice(resultSet.getDouble(4));
+        book.setProfilePic(resultSet.getString("profile_pic"));
         int authorId = resultSet.getInt("author_id");
         Author author = authorManager.getById(authorId);
         book.setAuthor(author);
@@ -78,7 +80,7 @@ public class BookManager {
     }
 
     public void edit(Book book) {
-        String sql = "Update book set title=?,description=?,price =?,author_id=? WHERE id=?";
+        String sql = "Update book set title=?,description=?,price =?,author_id=?,prifile_pic=? WHERE id=?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, book.getTitle());
@@ -86,6 +88,7 @@ public class BookManager {
             preparedStatement.setDouble(3, book.getPrice());
             preparedStatement.setInt(4, book.getAuthor().getId());
             preparedStatement.setInt(5, book.getId());
+            preparedStatement.setString(6,book.getProfilePic());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

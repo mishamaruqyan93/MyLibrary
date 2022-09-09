@@ -10,7 +10,7 @@
     List<Author> authors = (List<Author>) request.getAttribute("authors");
 %>
 Please input book's date:
-<form action="/books/add" method="post">
+<form action="/books/add" method="post" enctype="multipart/form-data">
     <input type="text" name="title" placeholder="please input title"/><br>
     <input type="text" name="description" placeholder="please input description"/><br>
     <input type="number" name="price" placeholder="Please input price"><br>
@@ -20,7 +20,9 @@ Please input book's date:
             <%=author.getAge()%>
         </option>
         <%}%>
-    </select>
+    </select><br>
+    Profile picture<br>
+    <input type="file" name="profilePic"><br>
     <input type="submit" value="Add">
 </form>
 </body>
